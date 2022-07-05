@@ -1,4 +1,4 @@
-import { createFormItem } from '@/components/create-form/types'
+import { createFormItem } from '../../filter-config/types'
 import { IDatePickerType } from 'element-plus/lib/components/date-picker/src/date-picker.type'
 export interface commonConfig {
   formKey: string

@@ -1,6 +1,6 @@
 <template>
   <el-form-item
-    :props="formKey"
+    :prop="formKey"
     :label="label"
     :label-width="labelWidth"
     :required="required"
@@ -39,10 +39,10 @@ interface selectProps {
   formKey: string
   defaultValue?: string | number | boolean | object
   label: string
-  labelWidth: number
-  required: boolean
-  rules: FormItemRule | FormItemRule[]
-  isShowErrorMessage: boolean
+  labelWidth?: number
+  required?: boolean
+  rules?: FormItemRule | FormItemRule[]
+  isShowErrorMessage?: boolean
   config: {
     collapseTags?: boolean
     collapseTagsTooltip?: boolean
@@ -61,6 +61,9 @@ const props = withDefaults(defineProps<selectProps>(), {
   defaultValue: '',
   collapseTagsTooltip: false,
   multiple: false,
+  required: false,
+  labelWidth: 80,
+  isShowErrorMessage: false,
   config: () => {
     return {
       collapseTags: false,

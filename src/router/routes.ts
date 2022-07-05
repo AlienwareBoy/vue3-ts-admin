@@ -4,37 +4,40 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'login',
-    component: () => import('@/views/login/index.vue')
-  },
-  {
-    path: '/low-code',
-    name: 'low-code',
-    component: () => import('@/views/lowCode/index.vue')
-  },
-  {
-    path: '/basic-page',
-    name: 'basicePage',
-    component: () => import('@/views/basic-page/index.vue'),
+    component: () => import('@/views/login/index.vue'),
     meta: {
-      menuTitle: '基础',
-      isMenu: true
+      isHidenRoute: true,
+      menuTitle: '系统后台'
     }
   },
   {
-    path: '/idea-page',
-    name: 'idea-page',
+    path: '/test1',
+    name: 'test1',
+    component: () => import('../views/test1/index.vue'),
+    meta: {
+      isMenu: true,
+      menuTitle: '一级目录'
+    }
+  },
+  {
+    path: '/test2',
+    name: 'test2',
     component: Layout,
     meta: {
-      menuTitle: '成员管理'
+      menuTitle: '系统后台2'
     },
     children: [
       {
-        path: 'user-list',
-        name: 'userList',
-        component: () => import('@/views/idea-page/index.vue'),
-        meta: { v2: true, title: '成员列表' }
+        path: 'text3',
+        meta: {
+          v2: true,
+          keepAlive: true,
+          title: '文档列表'
+        },
+        component: () => import('../views/test2/index.vue')
       }
     ]
   }
 ]
+
 export default routes

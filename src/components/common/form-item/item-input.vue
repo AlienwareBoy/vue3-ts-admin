@@ -1,13 +1,13 @@
 <template>
   <el-form-item
-    :props="formKey"
+    :prop="formKey"
     :label="label"
-    :label-width="labelWidth"
-    :required="required"
-    :rules="rules"
-    :isShowErrorMessage="isShowErrorMessage"
+    :label-width="labelWidth || 80"
+    :required="required || false"
+    :rules="rules || []"
+    :isShowErrorMessage="isShowErrorMessage || false"
   >
-    <el-input :type="config?.itemType || 'text'" :autosize="{ minRows: 2, maxRows: 4 }" v-model="itemValue" @change="getValue"></el-input>
+    <el-input :type="config?.itemType || 'text'" :autosize="{ minRows: 2, maxRows: 4 }" v-model="itemValue" @input="getValue"></el-input>
   </el-form-item>
 </template>
 
@@ -20,11 +20,11 @@ interface InputProps {
   curIndex: number
   formKey: string
   label: string
-  labelWidth: number
-  required: boolean
-  rules: FormItemRule | FormItemRule[]
-  isShowErrorMessage: boolean
-  defaultValue: string
+  labelWidth?: number
+  required?: boolean
+  rules?: FormItemRule | FormItemRule[]
+  isShowErrorMessage?: boolean
+  defaultValue?: string
   config?: {
     itemType?: InputType
   }
@@ -32,6 +32,10 @@ interface InputProps {
 const props = withDefaults(defineProps<InputProps>(), {
   curIndex: 0,
   formKey: '',
+  required: false,
+  labelWidth: 80,
+  isShowErrorMessage: false,
+  rules: () => [],
   defaultValue: '',
   config: () => {
     return {
@@ -46,17 +50,24 @@ let state = reactive<DataProps>({ itemValue: '' })
 const emit = defineEmits<{
   (e: 'getValue', data: exportValue): void
 }>()
-const getValue = utils.throttle(value => {
-  console.log(value)
-}, 3000)
-//  (value: string) => {
-//   // console.log(props)
-//   // emit('getValue', {
-//   //   formKey: props.formKey,
-//   //   value: value,
-//   //   curIndex: props.curIndex
-//   // })
+// const getValue = (value: string) => {
+//   emit('getValue', {
+//     formKey: props.formKey,
+//     value: value,
+//     curIndex: props.curIndex
+//   })
 // }
+const getValue = utils.throttle(
+  value => {
+    emit('getValue', {
+      formKey: props.formKey,
+      value: value,
+      curIndex: props.curIndex
+    })
+  },
+  1000,
+  true
+)
 watch(
   () => props.defaultValue,
   cur => {

@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 // import projectRoutes from '@/router/projectRoutes'
 import routes from '../router/routes'
 import { RouteRecordRaw } from 'vue-router'
+import { signIn } from '@/apis/common'
 import { formProps } from '@/views/login/types'
 import storage from '@/utils/storage'
 interface userInfoProps {
@@ -37,7 +38,18 @@ const useUserAuth = defineStore('auth', {
       this.userInfo = payload
     },
     login(form: formProps) {
-      console.log(1)
+      return new Promise((resolve, reject) => {
+        signIn(form)
+          .then(res => {
+            const { data } = res
+            this.setUserInfo({ ...data.info, auth: data.auth })
+            storage.set('auth', data.auth)
+            resolve(data)
+          })
+          .catch(err => {
+            reject(false)
+          })
+      })
     }
   }
 })

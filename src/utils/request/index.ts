@@ -12,10 +12,10 @@ const request = axios.create({
 
 function resolve(res: any) {
   const { data } = res
-  if (data.statusCode === 200) {
-    return Promise.resolve(data)
-  } else if (data.statusCode === 500) {
+  if (data.statusCode && data.statusCode !== 200) {
     ElMessage.error(data.errors)
+    return Promise.resolve(data)
+  } else {
     return Promise.resolve(data)
   }
 }

@@ -1,26 +1,34 @@
 <template>
-  <router-view />
+  <el-config-provider :locale="locale">
+    <router-view />
+  </el-config-provider>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+<script setup lang="ts">
+import { ElConfigProvider } from 'element-plus'
+import userAdminConfig from '@/store/config'
+import { watch } from 'vue'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import zhTW from 'element-plus/lib/locale/lang/zh-tw'
+import en from 'element-plus/lib/locale/lang/en'
+import { toRefs, reactive, ref } from 'vue'
+const store = userAdminConfig()
+const locale = ref(zhCn)
+watch(
+  () => store.defalutLocalLanguage,
+  cur => {
+    if (cur === 'zh_CN') {
+      locale.value = zhCn
     }
-  }
-}
-</style>
+    if (cur === 'zh_TW') {
+      locale.value = zhTW
+    }
+    if (cur === 'en') {
+      locale.value = en
+    }
+    console.log(locale, 'sdf')
+  },
+  { deep: true }
+)
+</script>
+<style lang="scss" scoped></style>

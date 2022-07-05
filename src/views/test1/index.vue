@@ -1,13 +1,13 @@
 <!--  -->
 <template>
-  <div>
-    <lowCode></lowCode>
-  </div>
+  <BaseLayout>
+    <div>基础目录</div>
+  </BaseLayout>
 </template>
 
 <script lang="ts" setup>
+import BaseLayout from '@/components/layout/index.vue'
 import { reactive, toRefs } from 'vue'
-import lowCode from '@/components/low-code/index.vue'
 interface DataProps {
   num: number
 }

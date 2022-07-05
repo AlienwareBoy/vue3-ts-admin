@@ -1,7 +1,7 @@
 <template>
   <div class="admin-hkx-container">
     <div class="loginModal">
-      <p>管理后台</p>
+      <p>后台</p>
       <el-form label-position="left" ref="ruleFormRef" :model="loginForm" :rules="rules" label-width="80px" style="width: 100%">
         <el-form-item prop="usernameEmail" label="账号">
           <el-input placeholder="请输入账号" v-model="loginForm.usernameEmail" @keyup.enter="submitForm(ruleFormRef)"></el-input>
@@ -23,7 +23,7 @@
               <el-image style="cursor: pointer; border: 1px solid #ccc" :src="vImage" fit="fill" @click="initImage">
                 <template #error>
                   <div class="image-slot">
-                    <!-- <el-icon><icon-picture /></el-icon> -->
+                    <el-icon><icon-picture /></el-icon>
                   </div>
                 </template>
               </el-image>
@@ -42,8 +42,13 @@
 import { DataProps } from './types'
 import { reactive, toRefs, onMounted, ref } from 'vue'
 import { ElForm, ElSelect, ElOption, ElInput, ElFormItem, ElButton, ElRow, ElCol, ElImage } from 'element-plus'
+import { getvCode } from '../../apis/common'
 import type { FormInstance } from 'element-plus'
+import useUserAuth from '@/store/user'
+import { useRouter } from 'vue-router'
 const ruleFormRef = ref<FormInstance>()
+const store = useUserAuth()
+const router = useRouter()
 let state = reactive<DataProps>({
   vImage: '',
   rules: {
@@ -70,13 +75,27 @@ let state = reactive<DataProps>({
   }
 })
 let initImage = () => {
-  console.log(1)
+  getvCode().then(res => {
+    console.log(res.data, 'vCodeBase64')
+    state.vImage = `data:image/jpg;base64,${res.data.vCodeBase64}`
+    state.loginForm.vCodeId = res.data.vCodeId
+  })
 }
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid, fields) => {
     if (valid) {
       console.log('submit!')
+      store
+        .login(state.loginForm)
+        .then(res => {
+          console.log(res, '--------res--------')
+          router.push({ name: 'projectList' })
+        })
+        .catch(err => {
+          console.log(err, '----')
+          initImage()
+        })
     } else {
       console.log('error submit!', fields)
     }

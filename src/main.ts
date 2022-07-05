@@ -1,8 +1,11 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import { createPinia } from 'pinia'
-import './assets/reset.css' // 初始化浏览器
 import './assets/common.scss'
+import './assets/reset.css' // 初始化浏览器
 import 'element-plus/dist/index.css'
-createApp(App).use(createPinia()).use(router).mount('#app')
+import { createPinia } from 'pinia'
+import directives from '@/utils/directive/index'
+
+const app = createApp(App)
+app.use(directives).use(createPinia()).use(router).mount('#app')
